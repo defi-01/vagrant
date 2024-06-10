@@ -1,0 +1,116 @@
+# Use Vagrant 2 configuration syntax
+Vagrant.configure("2") do |config|
+    # Set the default box to CentOS 7
+    config.vm.box = "centos/7"
+    # Do not check the repository for updates
+    config.vm.box_check_update = false
+  
+    # Enable the hostmanager plugin to manage /etc/hosts file
+    config.hostmanager.enabled = true
+    config.hostmanager.manage_host = true
+  
+    # Define the nginx VM
+    config.vm.define "web01" do |web01|
+      # Use the Ubuntu 16.04 (Xenial Xerus) box
+      web01.vm.box = "ubuntu/xenial64"
+      # Set the hostname for the VM
+      web01.vm.hostname = "web01"
+      # Configure a private network with a specific IP address
+      web01.vm.network "private_network", ip: "192.168.50.11"
+      # Specify VirtualBox as the provider
+      web01.vm.provider "virtualbox" do |vb|
+        # Set a name for the VM
+        vb.name = "web01"
+        # Allocate 1024 MB of memory
+        vb.memory = 1024
+        # Set the number of CPU cores
+        vb.cpus = 1
+      end
+      # Provision nginx using script
+      web01.vm.provision "shell", path: "nginx.sh"
+    end
+  
+    # Define the Tomcat VM
+    config.vm.define "app01" do |app01|
+      # Use the CentOS 7 box from geerlingguy
+      app01.vm.box = "geerlingguy/centos7"
+      # Set the hostname for the VM
+      app01.vm.hostname = "app01"
+      # Configure a private network with a specific IP address
+      app01.vm.network "private_network", ip: "192.168.50.12"
+      # Specify VirtualBox as the provider
+      app01.vm.provider "virtualbox" do |vb|
+        # Set a name for the VM
+        vb.name = "app01"
+        # Allocate 1024 MB of memory
+        vb.memory = 1024
+        # Set the number of CPU cores
+        vb.cpus = 1
+      end
+      # Provision Tomcat using script
+      app01.vm.provision "shell", path: "tomcat.sh"
+    end
+  
+    # Define the RabbitMQ VM
+    config.vm.define "rmq01" do |rmq01|
+      # Use the CentOS 7 box from geerlingguy
+      rmq01.vm.box = "geerlingguy/centos7"
+      # Set the hostname for the VM
+      rmq01.vm.hostname = "rmq01"
+      # Configure a private network with a specific IP address
+      rmq01.vm.network "private_network", ip: "192.168.50.16"
+      # Specify VirtualBox as the provider
+      rmq01.vm.provider "virtualbox" do |vb|
+        # Set a name for the VM
+        vb.name = "rmq01"
+        # Allocate 1024 MB of memory
+        vb.memory = 1024
+        # Set the number of CPU cores
+        vb.cpus = 1
+      end
+      # Provision RabbitMQ using script
+      rmq01.vm.provision "shell", path: "rabbitmq.sh" 
+    end
+  
+    # Define the Memcache VM
+    config.vm.define "mc01" do |mc01|
+      # Use the CentOS 7 box from geerlingguy
+      mc01.vm.box = "geerlingguy/centos7"
+      # Set the hostname for the VM
+      mc01.vm.hostname = "mc01"
+      # Configure a private network with a specific IP address
+      mc01.vm.network "private_network", ip: "192.168.50.14"
+      # Specify VirtualBox as the provider
+      mc01.vm.provider "virtualbox" do |vb|
+        # Set a name for the VM
+        vb.name = "mc01"
+        # Allocate 1024 MB of memory
+        vb.memory = 1024
+        # Set the number of CPU cores
+        vb.cpus = 1
+      end
+      # Provision Memcache using script
+      mc01.vm.provision "shell", path: "memcache.sh"
+    end
+  
+    # Define the Database VM
+    config.vm.define "db01" do |db01|
+      # Use the CentOS 7 box from geerlingguy
+      db01.vm.box = "geerlingguy/centos7"
+      # Set the hostname for the VM
+      db01.vm.hostname = "db01"
+      # Configure a private network with a specific IP address
+      db01.vm.network "private_network", ip: "192.168.50.15"
+      # Specify VirtualBox as the provider
+      db01.vm.provider "virtualbox" do |vb|
+        # Set a name for the VM
+        vb.name = "db01"
+        # Allocate 1024 MB of memory
+        vb.memory = 1024
+        # Set the number of CPU cores
+        vb.cpus = 1
+      end
+      # Provision MySQL using script
+      db01.vm.provision "shell", path: "mysql.sh"
+    end
+end
